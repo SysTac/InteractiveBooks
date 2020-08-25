@@ -5,7 +5,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
+import java.util.logging.Level;
+
+import static org.bukkit.Bukkit.getLogger;
 
 final class Config {
 
@@ -26,7 +32,11 @@ final class Config {
     }
 
     private static void loadBookConfigs() {
-        InteractiveBooks.getBooks().keySet().forEach(InteractiveBooks::unregisterBook);
+        Set<String> bookIds = new HashSet<>(InteractiveBooks.getBooks().keySet());
+        for (String bookId : bookIds) {
+            InteractiveBooks.unregisterBook(bookId);
+        }
+        //InteractiveBooks.getBooks().keySet().forEach(InteractiveBooks::unregisterBook);
         File booksFolder = new File(InteractiveBooks.getInstance().getDataFolder(), "books");
         for (File f : Objects.requireNonNull(booksFolder.listFiles()))
             if (f.getName().endsWith(".yml"))
